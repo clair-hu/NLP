@@ -15,7 +15,7 @@ from matplotlib import pyplot as plt
 
 
 
-data = pd.read_csv("train/train.csv")
+data = pd.read_csv("../OriginalData/train.csv")
 
 # extracting the number of examples of each class
 EAP_len = data[data['author'] == 'EAP'].shape[0]
@@ -211,39 +211,33 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, log_loss
 from sklearn.model_selection import GridSearchCV
 
-alpha_list1 = np.linspace(0.006, 0.1, 20)
-alpha_list1 = np.around(alpha_list1, decimals=4)
+
+alpha_list = np.linspace(0.006, 0.1, 20)
+alpha_list = np.around(alpha_list1, decimals=4)
 """Grid search"""
 parameter_grid = [{"alpha":alpha_list1}]
 
-classifier1 = MultinomialNB()
+classifier = MultinomialNB()
 """gridsearch object using 4 fold cross validation and neg_log_loss as scoring parameter"""
-gridsearch1 = GridSearchCV(classifier1, parameter_grid, scoring='neg_log_loss', cv=4)
-gridsearch1.fit(df[features], df[output])
+gridsearch = GridSearchCV(classifier, parameter_grid, scoring='neg_log_loss', cv=4)
+gridsearch.fit(df[features], df[output])
 
-#results1 = pd.DataFrame()
-## collect alpha list
-#results1['alpha'] = gridsearch1.cv_results_['param_alpha'].data
-## collect test scores
-#results1['neglogloss'] = gridsearch1.cv_results_['mean_test_score'].data
-#
-#matplotlib.rcParams['figure.figsize'] = (12.0, 6.0)
-#plt.plot(results1['alpha'], -results1['neglogloss'])
-#plt.xlabel('alpha')
-#plt.ylabel('logloss')
-#plt.grid()
-#plt.show()
+results = pd.DataFrame()
+# collect alpha list
+results['alpha'] = gridsearch.cv_results_['param_alpha'].data
+# collect test scores
+results['neglogloss'] = gridsearch.cv_results_['mean_test_score'].data
 
+matplotlib.rcParams['figure.figsize'] = (12.0, 6.0)
+plt.plot(results['alpha'], -results['neglogloss'])
+plt.xlabel('alpha')
+plt.ylabel('logloss')
+plt.grid()
+plt.show()
 
-
-
-
+print("Best parameter: ",gridsearch.best_params_)
+print("Best score: ",gridsearch.best_score_) 
 
 
-
-
-
-
-
-
+################################ TODO: TRY GaussianNB, BernoulliNB #############################
 
