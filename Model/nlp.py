@@ -75,4 +75,13 @@ Top words before stemming
 collect vocabulary count
 """
 from sklearn.feature_extraction.text import CountVectorizer
-count_vec
+count_vectorizer = CountVectorizer()
+count_vectorizer.fit(data['text'])
+dictionary = count_vectorizer.vocabulary_.items()  
+vocab = []
+count = []
+for key, value in dictionary:
+    vocab.append(key)
+    count.append(value)
+vocab_bef_stem = pd.Series(count, index=vocab)
+vocab_bef_stem = vocab_bef_stem.sort_values(ascending=False)
